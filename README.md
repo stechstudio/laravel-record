@@ -1,5 +1,9 @@
 # Laravel Record
 
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Quality Score](https://img.shields.io/scrutinizer/g/stechstudio/laravel-record.svg?style=flat-square)](https://scrutinizer-ci.com/g/stechstudio/laravel-record)
+[![Total Downloads](https://img.shields.io/packagist/dt/stechstudio/laravel-record.svg?style=flat-square)](https://packagist.org/packages/stechstudio/laravel-record)
+
 I'm going to assume you already know all about Laravel's awesome [Collection](https://laravel.com/docs/5.4/collections) class, 
 and hopefully you've read [Refactoring to Collections](https://adamwathan.me/refactoring-to-collections/). 
 (If you haven't, stop what you're doing and go buy that PDF. You'll thank me later.)
