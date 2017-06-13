@@ -1,0 +1,31 @@
+{
+    "name": "stechstudio/laravel-record",
+    "description": "What if Laravel's Collection and Model classes had a baby?",
+    "authors": [
+        {
+            "name": "Joseph Szobody",
+            "email": "joseph@stechstudio.com"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "illuminate/support": "^5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "STS\\Record\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "STS\\Record\\Test\\": "tests"
+        }
+    }
+}
