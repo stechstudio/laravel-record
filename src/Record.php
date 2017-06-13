@@ -16,7 +16,7 @@ class Record extends Collection
      */
     public function __get($key)
     {
-        if (in_array($key, static::$proxies)) {
+        if (property_exists(static::class, 'proxies') && in_array($key, static::$proxies)) {
             return new HigherOrderCollectionProxy($this, $key);
         }
 
