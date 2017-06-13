@@ -16,9 +16,9 @@ Starting with the Collection class, I wanted to add:
 
 1) **Magic getter for attributes**. If you have key/value pairs in your collection, the Collection class does provide
 the [get](https://laravel.com/docs/5.4/collections#method-get) method. But I'm lazy. And I like accessing my collection
-with plan 'ol object notation. You know, like a model. Record lets you do `$collection->attribute`.
+with plain 'ol object notation. You know, like a model. Record lets you do `$collection->attribute`.
 
-2) **New collection for sub-arrays**. If you hand a multi-dimentional array to `collect()` and access a nested array, it's still
+2) **New collection for sub-arrays**. If you hand a multi-dimensional array to `collect()` and access a nested array, it's still
 just an array. Like `$collection->get('attribute')['subattribute']`. I want collections all the way down! This will turn 
 any sub-array into a new instance of Record, allowing you to do `$record->attribute->subattribute->as->deep->as->your->array->goes`. 
 And because you still have a real collection at each level, you can use all of the goodies like `$record->attribute->subattribute->count()`.
