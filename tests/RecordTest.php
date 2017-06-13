@@ -1,6 +1,7 @@
 <?php
 namespace STS\Record\Test;
 
+use Illuminate\Support\HigherOrderCollectionProxy;
 use STS\Record\Record;
 
 /**
@@ -47,6 +48,14 @@ class RecordTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Record::class, $record->foo);
         $this->assertInstanceOf(Record::class, $record->foo->bar);
         $this->assertEquals(3, $record->foo->bar->qux->count());
+    }
+
+    /** @test */
+    public function it_supports_higher_order()
+    {
+        $record = new Record(["foo" => "bar"]);
+
+        $this->assertInstanceOf(HigherOrderCollectionProxy::class, $record->each);
     }
 
     /** @test */
