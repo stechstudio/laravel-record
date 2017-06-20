@@ -61,4 +61,40 @@ class Record extends Collection
     {
         return $this->{'get'.Str::studly($key).'Attribute'}($value);
     }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function __set($key, $value)
+    {
+        $this->setAttribute($key, $value);
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAttribute($key, $value)
+    {
+        if ($this->hasSetMutator($key)) {
+            $method = 'set'.Str::studly($key).'Attribute';
+
+            return $this->{$method}($value);
+        }
+
+        return $this->put($key, $value);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return bool
+     */
+    public function hasSetMutator($key)
+    {
+        return method_exists($this, 'set'.Str::studly($key).'Attribute');
+    }
 }

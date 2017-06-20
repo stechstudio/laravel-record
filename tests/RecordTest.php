@@ -63,6 +63,16 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(Record::class, record([]));
     }
+
+    /** @test */
+    public function it_provides_attribute_setter()
+    {
+        $record = new Record(["foo" => "bar"]);
+
+        $record->baz = "qux";
+
+        $this->assertEquals("qux", $record->baz);
+    }
 }
 
 class RecordDouble extends Record {
