@@ -8,6 +8,27 @@ use Illuminate\Support\Str;
 class Record extends Collection
 {
     /**
+     * Record constructor.
+     *
+     * @param array $items
+     */
+    public function __construct($items = [])
+    {
+        parent::__construct($items);
+        $this->wrapArraysAsRecords();
+    }
+
+    /**
+     * Make sure any array elements are setup as new Records
+     */
+    protected function wrapArraysAsRecords()
+    {
+        $this->items = array_map(function($item) {
+            return is_array($item) ? new static($item) : $item;
+        }, $this->items);
+    }
+
+    /**
      * If we don't have a proxy for this key, see if it exists in our items array.
      *
      * @param string $key
@@ -36,9 +57,7 @@ class Record extends Collection
             return $this->mutateAttribute($key, $value);
         }
 
-        return is_array($value)
-            ? new static($value)
-            : $value;
+        return $value;
     }
 
     /**

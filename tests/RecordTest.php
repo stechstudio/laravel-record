@@ -48,6 +48,8 @@ class RecordTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Record::class, $record->foo);
         $this->assertInstanceOf(Record::class, $record->foo->bar);
         $this->assertEquals(3, $record->foo->bar->qux->count());
+
+        $this->assertInstanceOf(Record::class, $record->first());
     }
 
     /** @test */
