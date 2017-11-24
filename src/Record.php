@@ -19,6 +19,16 @@ class Record extends Collection
     }
 
     /**
+     * @param array $items
+     *
+     * @return static
+     */
+    public static function make($items = [])
+    {
+        return new static($items);
+    }
+
+    /**
      * Make sure any array elements are setup as new Records
      */
     protected function wrapArraysAsRecords()
