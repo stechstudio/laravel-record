@@ -1,14 +1,15 @@
 <?php
 namespace STS\Record\Test;
 
-use Illuminate\Support\HigherOrderCollectionProxy;
 use STS\Record\Record;
+use Illuminate\Support\HigherOrderCollectionProxy;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RecordTest
  * @package STS\Record\Test
  */
-class RecordTest extends \PHPUnit_Framework_TestCase
+class RecordTest extends TestCase
 {
     /** @test */
     public function it_provides_attribute_access()
@@ -74,6 +75,19 @@ class RecordTest extends \PHPUnit_Framework_TestCase
         $record->baz = "qux";
 
         $this->assertEquals("qux", $record->baz);
+    }
+
+    /** @test */
+    public function it_translates_to_snake_case()
+    {
+        $record = new Record(["my_foo" => "bar"]);
+
+        $this->assertEquals("bar", $record->myFoo);
+
+        // But still prefer exact match if it exists
+        $record = new Record(["my_foo" => "bar", "myFoo" => "baz"]);
+
+        $this->assertEquals("baz", $record->myFoo);
     }
 }
 

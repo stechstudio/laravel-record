@@ -61,7 +61,9 @@ class Record extends Collection
      */
     public function getAttribute($key)
     {
-        $value = $this->get($key);
+        $fallback = $key !== Str::snake($key) ? $this->get(Str::snake($key)) : null;
+
+        $value = $this->get($key, $fallback);
 
         if($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
