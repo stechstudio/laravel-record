@@ -87,7 +87,7 @@ first and last, or... you get the idea.
 You know the drill.
 
 ```
-composer require sts/laravel-record
+composer require stechstudio/laravel-record
 ```
 
 Then you can either:
