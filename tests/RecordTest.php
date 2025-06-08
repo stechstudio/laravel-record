@@ -1,6 +1,7 @@
 <?php
 namespace STS\Record\Test;
 
+use Illuminate\Contracts\Support\Arrayable;
 use STS\Record\Record;
 use Illuminate\Support\HigherOrderCollectionProxy;
 use PHPUnit\Framework\TestCase;
@@ -88,6 +89,18 @@ class RecordTest extends TestCase
         $record = new Record(["my_foo" => "bar", "myFoo" => "baz"]);
 
         $this->assertEquals("baz", $record->myFoo);
+    }
+
+    /** @test */
+    public function it_serializes_to_array()
+    {
+        $record = new Record(["foo" => "bar", "baz" => ["qux" => "corge"]]);
+
+        $array = $record->toArray();
+
+        $this->assertIsArray($array);
+        $this->assertIsArray($array['baz']);
+        $this->assertEquals(["qux" => "corge"], $array['baz']);
     }
 }
 

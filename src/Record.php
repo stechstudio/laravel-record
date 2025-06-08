@@ -1,51 +1,33 @@
 <?php
+
 namespace STS\Record;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HigherOrderCollectionProxy;
 use Illuminate\Support\Str;
 
 class Record extends Collection
 {
-    /**
-     * Record constructor.
-     *
-     * @param array $items
-     */
     public function __construct($items = [])
     {
         parent::__construct($items);
         $this->wrapArraysAsRecords();
     }
 
-    /**
-     * @param array $items
-     *
-     * @return static
-     */
-    public static function make($items = [])
+    public static function make($items = []): static
     {
         return new static($items);
     }
 
-    /**
-     * Make sure any array elements are setup as new Records
-     */
     protected function wrapArraysAsRecords()
     {
-        $this->items = array_map(function($item) {
+        $this->items = array_map(function ($item) {
             return is_array($item) ? new static($item) : $item;
         }, $this->items);
     }
 
-    /**
-     * If we don't have a proxy for this key, see if it exists in our items array.
-     *
-     * @param string $key
-     *
-     * @return HigherOrderCollectionProxy|mixed|null
-     */
-    public function __get($key)
+    public function __get($key): mixed
     {
         if (property_exists(static::class, 'proxies') && in_array($key, static::$proxies)) {
             return new HigherOrderCollectionProxy($this, $key);
@@ -54,61 +36,35 @@ class Record extends Collection
         return $this->getAttribute($key);
     }
 
-    /**
-     * @param $key
-     *
-     * @return mixed
-     */
-    public function getAttribute($key)
+    public function getAttribute($key): mixed
     {
         $fallback = $key !== Str::snake($key) ? $this->get(Str::snake($key)) : null;
 
         $value = $this->get($key, $fallback);
 
-        if($this->hasGetMutator($key)) {
+        if ($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
         }
 
         return $value;
     }
 
-    /**
-     * @param $key
-     *
-     * @return bool
-     */
-    public function hasGetMutator($key)
+    public function hasGetMutator($key): bool
     {
         return method_exists($this, 'get'.Str::studly($key).'Attribute');
     }
 
-    /**
-     * @param $key
-     * @param $value
-     *
-     * @return mixed
-     */
-    protected function mutateAttribute($key, $value)
+    protected function mutateAttribute($key, $value): mixed
     {
         return $this->{'get'.Str::studly($key).'Attribute'}($value);
     }
 
-    /**
-     * @param $key
-     * @param $value
-     */
     public function __set($key, $value)
     {
         $this->setAttribute($key, $value);
     }
 
-    /**
-     * @param $key
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setAttribute($key, $value)
+    public function setAttribute($key, $value): static
     {
         if ($this->hasSetMutator($key)) {
             $method = 'set'.Str::studly($key).'Attribute';
@@ -119,13 +75,22 @@ class Record extends Collection
         return $this->put($key, $value);
     }
 
-    /**
-     * @param $key
-     *
-     * @return bool
-     */
-    public function hasSetMutator($key)
+    public function hasSetMutator($key): bool
     {
         return method_exists($this, 'set'.Str::studly($key).'Attribute');
+    }
+
+    public function toArray()
+    {
+        $recurse = function ($value) use (&$recurse) {
+            return match(true) {
+                $value instanceof self => $value->toArray(),
+                $value instanceof Arrayable => $value->toArray(),
+                is_array($value) => array_map($recurse, $value),
+                default => $value,
+            };
+        };
+
+        return array_map($recurse, $this->items);
     }
 }
