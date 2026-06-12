@@ -15,7 +15,7 @@ class Record extends Collection
         $this->wrapArraysAsRecords();
     }
 
-    public static function make($items = []): static
+    public static function make($items = [], ...$args): static
     {
         return new static($items);
     }
